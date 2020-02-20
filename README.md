@@ -12,6 +12,14 @@
 
 Vinculei minha chave pública na minha conta no Github e criei um repositório público, com o nome [google-cloud-csv-ingestion](https://github.com/flavioti/google-cloud-csv-ingestion) 
 
+### Diretórios
+
+- resources/ - Armazena imagens usadas neste documento.
+- src/bigquery/ - Código Python usados para análise exploratória
+- src/dataflow/ - Código Python usado no processo de transformação dos dados (Apache Beam).
+- src/terraform/ - Código HCL para criação de dos recursos na nuvem com Infraestrutura como código
+- src/deploy_beam_job.sh - Código em Shell Script para implantar a aplicação do Dataflow na plataforma GCP.
+- src/upload_files.sh - Código em Shell Script para enviar os arquivos CSV da máquina local para o Google Storage.
 
 ### Máquina local
 
@@ -37,10 +45,7 @@ gcloud config set project treinamento-254613
 
 ## Criação do dataset e tabela do BigQuery
 
-```sh
-bq mk --location=us --dataset treinamento-254613:csv_ingestion
-
-```
+Criei a tabela através do console, com base nos arquivos gerados no GCS
 
 ## Python (Preparação do ambiente)
 
@@ -53,34 +58,33 @@ python --version
 pip install google-cloud-bigquery
 ```
 
-## Arquitetura
-
-
-```mermaid
-graph LR;
-    A[Cloud Storage]
-    B[Data fusion]
-    C[BigQuery]
-    A-->B-->C
-```
-
 ## Volume de dados
 
-Não vale a pena usar o Dataflow porque o Bruno falou que não compensa, então pronto :)
+Os dados fornecidos são pequenos, usei o Dataflow mesmo não sendo a ferramenta adequada pois constava no enunciado.
+
+## Arquitetura
+
+[Arquitetura aplicada](resources/alternativa_a.svg) 
+
+```mermaid
+graph TD;
+    A[Upload manual para GCS]
+    B[Cloud Storage]
+    C[Dataflow]
+    D[BigQuery]
+    E[Datastudio]
+    A-->B-->C-->D
+    E-->D
+```
+
+Captura de tela da aplicação em execução no Dataflow:
+
+![alt text](resources/dataflow.png)
 
 
+As alternativas de arquitetura abaixo são viáveis, mas não estavam no escopo e sua aplicação sairia do contexto do exame:
 
-Alguns registros não tem referência nos arquivos
-('TA-21197', {'price_quote': ['TA-21197,S-0026,2009-07-30,3,1,No,1,53.6186242161549'], 'bill_of_materials': ['TA-21197,C-1733,1,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA']})
-('TA-21198', {'price_quote': [], 'bill_of_materials': ['TA-21198,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA']})
-('TA-21199', {'price_quote': [], 'bill_of_materials': ['TA-21199,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA']})
-
-
-
-
-As alternatvas abaixo não foram utilizadas pois não há volume de dados suficiente que justifique a aplicação
-
-[Alternativa A](sequence-diagrams/alternativa_a.svg) 
+[Alternativa A](resources/alternativa_a.svg) 
 
 ```mermaid
 graph LR;
@@ -92,7 +96,7 @@ graph LR;
 ```
 Por serem somente 3 arquivos CSV pequenos que provavelmente serão ingeridos em lote, não vejo a necessidade de usar mensageria.
 
-[Alternativa B](sequence-diagrams/alternativa_b.svg) 
+[Alternativa B](resources/alternativa_b.svg) 
 
 ```mermaid
 graph LR;
@@ -104,7 +108,7 @@ graph LR;
     A-->B-->C-->D-->E
 ```
 
-[Alternativa C](sequence-diagrams/alternativa_c.svg) 
+[Alternativa C](resources/alternativa_c.svg) 
 
 ```mermaid
 graph LR;
@@ -115,3 +119,11 @@ graph LR;
     E[Data Studio]
     A-->B-->C-->D-->E
 ```
+
+### Visualização dos dados
+
+Link para relatório do Datastudio:
+
+https://datastudio.google.com/reporting/f6f8b023-f194-4486-95f6-8e58dfdc177c
+
+![alt text](resources/relatorio.png)
