@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+
 from __future__ import absolute_import
 
 import argparse
@@ -49,7 +52,7 @@ class filter_by_key(beam.DoFn):
 class ab_flatener(beam.DoFn):
 
     def process(self, element):
-        
+
         yield element
 
 
