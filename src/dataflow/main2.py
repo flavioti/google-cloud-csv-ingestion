@@ -52,7 +52,7 @@ class filter_by_key(beam.DoFn):
 class ab_flatener(beam.DoFn):
 
     def process(self, element):
-
+        
         yield element
 
 
@@ -95,11 +95,6 @@ def run(argv=None):
     # pipeline_options = PipelineOptions(argv)
     # with beam.Pipeline(options=pipeline_options) as pipeline:
 
-    # "TA-21197,S-0026,2009-07-30,3,1,No,1,53.6186242161549"
-    # ("TA-21197","TA-21197,S-0026,2009-07-30,3,1,No,1,53.6186242161549")
-
-    #('T', 'TA-20812,S-0066,2014-01-22,1,0,Yes,1,28.1739120758055')
-
     price_quote = (
         p
         | 'Leitura' >> beam.io.ReadFromText(known_args.input_a, skip_header_lines=1)
@@ -129,27 +124,8 @@ def run(argv=None):
                | 'Imprimir A e B' >> beam.ParDo(print_element(), 'full1')
                | 'Organizar elementos' >> beam.ParDo(ab_flatener())
                | 'Imprimir A e B depois de organizar' >> beam.ParDo(print_element(), 'full2')
+               # | 'Salvar' >> beam.io.WriteToText('./tmp/')
                )
-
-    # results2 = ({'join_ab': join_ab, 'comp_boss': comp_boss}
-
-    #results | beam.Map(lambda s: print(s))
-
-    # KeyedValue
-
-    #results = ({'emails': emails, 'phones': phones} | beam.CoGroupByKey())
-
-    # emails_list = [('amy', 'amy@example.com'),     ('carl', 'carl@example.com'),     ('julia', 'julia@example.com'),     ('carl', 'carl@email.com'), ] phones_list = [('amy', '111-222-3333'),     ('james', '222-333-4444'),     ('amy', '333-444-5555'),     ('carl', '444-555-6666'), ]  emails = p | 'CreateEmails' >> beam.Create(emails_list) phones = p | 'CreatePhones' >> beam.Create(phones_list)   results = ({'emails': emails, 'phones': phones} | beam.CoGroupByKey())
-
-    # coGroupBy = KeyValue
-
-    # ','.join(j.split(',')[1:])
-
-    # def join_info(name_info):
-    #     (name, info) = name_info return '%s; %s; %s' %\
-    #         (name, sorted(info['emails']), sorted(info['phones']))
-
-    # contact_lines = results | beam.Map(join_info)
 
     p.run().wait_until_finish()
 

@@ -4,3 +4,4 @@ data/
 .vscode/
 src/__pycache__/
 output/
+tmp/
