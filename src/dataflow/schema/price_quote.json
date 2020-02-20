@@ -1,0 +1,43 @@
+[
+    {
+      "name": "tube_assembly_id",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "supplier",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "quote_date",
+      "type": "DATE",
+      "description": ""
+    },
+    {
+      "name": "quote_date",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "min_order_quantity",
+      "type": "INTEGER",
+      "description": ""
+    },
+    {
+      "name": "bracket_pricing",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "quantity",
+      "type": "STRING",
+      "description": ""
+    },
+    {
+      "name": "cost",
+      "type": "STRING",
+      "description": ""
+    }
+  
+  ]

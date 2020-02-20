@@ -1,0 +1,6 @@
+python3/
+data/
+.credentials/
+.vscode/
+src/__pycache__/
+output/
