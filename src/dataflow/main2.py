@@ -20,46 +20,6 @@ from apache_beam.transforms.combiners import Count
 from apache_beam.io.gcp.bigquery_tools import parse_table_schema_from_json
 
 
-class LeftJoin(beam.PTransform):
-    """Esta classe faz a junção de dois conjuntos de dados"""
-
-    def __init__(self, source_pipeline_name, source_data, join_pipeline_name, join_data, common_key):
-        self.join_pipeline_name = join_pipeline_name
-        self.source_data = source_data
-        self.source_pipeline_name = source_pipeline_name
-        self.join_data = join_data
-        self.common_key = common_key
-
-    def expand(self, pcolls):
-        def _format_as_common_key_tuple(data_dict, common_key):
-            return data_dict[common_key], data_dict
-
-        return ({pipeline_name: pcoll | 'Converte para ({0}, object) para {1}'
-                 .format(self.common_key, pipeline_name)
-                 >> beam.Map(_format_as_common_key_tuple, self.common_key)
-                 for (pipeline_name, pcoll) in pcolls.items()}
-                | 'CoGroupByKey {0}'.format(pcolls.keys()) >> beam.CoGroupByKey()
-                | 'Unnest Cogrouped' >> beam.ParDo(UnnestCoGrouped(),
-                                                   self.source_pipeline_name,
-                                                   self.join_pipeline_name)
-                )
-
-
-class UnnestCoGrouped(beam.DoFn):
-    """..."""
-
-    def process(self, input_element, source_pipeline_name, join_pipeline_name):
-        group_key, grouped_dict = input_element
-        join_dictionary = grouped_dict[join_pipeline_name]
-        source_dictionaries = grouped_dict[source_pipeline_name]
-        for source_dictionary in source_dictionaries:
-            try:
-                source_dictionary.update(join_dictionary[0])
-                yield source_dictionary
-            except IndexError:
-                yield source_dictionary
-
-
 class DataIngestion(object):
 
     def __init__(self):
