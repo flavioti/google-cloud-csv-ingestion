@@ -81,7 +81,7 @@ sphinxcontrib-websupport==1.2.0
 tenacity==5.1.5
 typing==3.7.4.1
 typing-extensions==3.7.4.1
-urllib3==1.25.8
+urllib3==1.26.5
 virtualenv==20.0.4
 wcwidth==0.1.8
 zipp==3.0.0
