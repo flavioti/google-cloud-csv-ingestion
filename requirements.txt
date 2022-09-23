@@ -54,7 +54,7 @@ pandas==0.24.2
 parameterized==0.7.1
 pbr==5.4.4
 pluggy==0.13.1
-protobuf==3.11.3
+protobuf==3.18.3
 py==1.8.1
 pyarrow==0.15.1
 pyasn1==0.4.8
